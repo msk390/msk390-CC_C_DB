@@ -50,7 +50,7 @@ void display_table(Table* table) {
 
 void start_repl() {
 	char command[256];  // Buffer pour lire les commandes
-	Node* root = NULL;  // Arbre binaire initialisé à NULL
+	  // Arbre binaire initialisé à NULL
 
 	printf("Bienvenue dans Class DB !\n");
 	printf("Commandes disponibles :\n");
@@ -71,13 +71,14 @@ void start_repl() {
 		if (strcmp(command, "EXIT") == 0) {
 			printf("Au revoir !\n");
 			break;
-		} else if (strncmp(command, "INSERT ", 7) == 0) {
+		} else if (strcmp(command, "INSERT") == 0) {
 			if (db_table.column_count == 0) {
 			printf("Erreur : aucune table n'a été créée. Utilisez CREATE TABLE d'abord.\n");
-				continue;
+			continue;
 		}
 
 			char values[MAX_COLUMNS][50];
+			printf("Entrez les valeurs pour les %d colonnes : /n", db_table.column_count);
 			for (int i = 0; i < db_table.column_count; i++) {
 				printf("%s : ", db_table.column_names[i]);
 				if (fgets(values[i], sizeof(values[i]), stdin) == NULL) {
@@ -88,10 +89,16 @@ void start_repl() {
 			}
 
 			insert_row(&db_table, values);
-
+			printf("Ligne insérée avcec succès!\n");
 		} else if (strcmp(command, "SELECT") == 0) {
-			printf("Contenu de la base de données :\n");
-			print_tree(root);
+			if (db_table.column_count == 0) {
+				printf("Erreur : aucune table n'a été créée. Utilisez CREATE TABLE d'abord.\n");
+				continue;
+			}
+
+			printf("Contenu de la table :\n");
+			display_table(&db_table);
+
 		} else if (strcmp(command, "CREATE TABLE") == 0) {
 			printf("Combien de colonnes voulez-vous ? (max %d) : ", MAX_COLUMNS);
 			char input[10];
