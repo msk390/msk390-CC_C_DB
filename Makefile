@@ -4,17 +4,17 @@ TARGET = class_db
 
 all: $(TARGET)
 
-$(TARGET): main.o btree.o repl.o
+$(TARGET): src/main.o src/btree.o src/repl.o
 	$(CC) $(CFLAGS) -o $(TARGET) main.o btree.o repl.o
 
-main.o: main.c
-	$(CC) $(CFLAGS) -c main.c
+src/main.o: src/main.c
+	$(CC) $(CFLAGS) -c src/main.c
 
-btree.o: btree.c btree.h
-	$(CC) $(CFLAGS) -c btree.c
+src/btree.o: src/btree.c src/btree.h
+	$(CC) $(CFLAGS) -c src/btree.c
 
-repl.o: repl.c repl.h btree.h
-	$(CC) $(CFLAGS) -c repl.c
+src/repl.o: src/repl.c src/repl.h src/btree.h
+	$(CC) $(CFLAGS) -c src/repl.c
 
 clean:
 	rm -f *.o $(TARGET)

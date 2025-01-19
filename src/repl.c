@@ -1,127 +1,40 @@
-#include <stdbool.h>
+#include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include "btree.h"
 
+void start_repl() {
+	char command[256];  // Buffer pour lire les commandes
+	Node* root = NULL;  // Arbre binaire initialisé à NULL
 
+	printf("Bienvenue dans Class DB !\n");
+	printf("Commandes disponibles :\n");
+	printf("  - INSERT <valeur>\n");
+	printf("  - SELECT\n");
+	printf("  - EXIT\n\n");
 
+	while (1) {
+		printf("db> ");  // Affiche le prompt
+		if (fgets(command, sizeof(command), stdin) == NULL) {
+		break;  // Quitte si EOF est atteint
+		}
 
-typedef enum {
-  META_COMMAND_SUCCESS,
-  META_COMMAND_UNRECOGNIZED_COMMAND
-} MetaCommandResult;
+		// Supprime le saut de ligne à la fin
+		command[strcspn(command, "\n")] = '\0';
 
-typedef enum { PREPARE_SUCCESS, PREPARE_UNRECOGNIZED_STATEMENT } PrepareResult;
-
-typedef enum { STATEMENT_INSERT, STATEMENT_SELECT } StatementType;
-
-typedef struct {
-  StatementType type;
-} Statement;
-
-
-
-typedef struct {
-  char* buffer;
-  size_t buffer_length;
-  ssize_t input_length;
-} InputBuffer;
-
-InputBuffer* new_input_buffer() {
-  InputBuffer* input_buffer = (InputBuffer*)malloc(sizeof(InputBuffer));
-  input_buffer->buffer = NULL;
-  input_buffer->buffer_length = 0;
-  input_buffer->input_length = 0;
-
-  return input_buffer;
+		if (strcmp(command, "EXIT") == 0) {
+			printf("Au revoir !\n");
+			break;
+		} else if (strncmp(command, "INSERT ", 7) == 0) {
+			int key = atoi(command + 7);  // Récupère la valeur après "INSERT "
+			insert_node(&root, key);
+			printf("Valeur %d insérée dans la base de données.\n", key);
+		} else if (strcmp(command, "SELECT") == 0) {
+			printf("Contenu de la base de données :\n");
+			print_tree(root);
+		} else {
+			printf("Commande inconnue. Essayez EXIT, INSERT ou SELECT.\n");
+		}
+	}
 }
 
-void print_prompt() { printf("db > "); }
-
-
-
-
-void read_input(InputBuffer* input_buffer) {
-  ssize_t bytes_read =
-      getline(&(input_buffer->buffer), &(input_buffer->buffer_length), stdin);
-
-  if (bytes_read <= 0) {
-    printf("Error reading input\n");
-    exit(EXIT_FAILURE);
-  }
-
-  // Ignore trailing newline
-  input_buffer->input_length = bytes_read - 1;
-  input_buffer->buffer[bytes_read - 1] = 0;
-}
-
-
-void close_input_buffer(InputBuffer* input_buffer) {
-    free(input_buffer->buffer);
-    free(input_buffer);
-}
-
-
-MetaCommandResult do_meta_command(InputBuffer* input_buffer) {
-  if (strcmp(input_buffer->buffer, ".exit") == 0) {
-    close_input_buffer(input_buffer);
-    exit(EXIT_SUCCESS);
-  } else {
-    //TODO  here implement handling of other input as .exit
-    return META_COMMAND_UNRECOGNIZED_COMMAND;
-  }
-}
-
-PrepareResult prepare_statement(InputBuffer* input_buffer,
-                                Statement* statement) {
-
-  if (strncmp(input_buffer->buffer, "insert", 6) == 0) {
-    statement->type = STATEMENT_INSERT;
-    return PREPARE_SUCCESS;
-  }
-  if (strcmp(input_buffer->buffer, "select") == 0) {
-    statement->type = STATEMENT_SELECT;
-    return PREPARE_SUCCESS;
-  }
-
-  return PREPARE_UNRECOGNIZED_STATEMENT;
-}
-
-void execute_statement(Statement* statement) {
-  switch (statement->type) {
-    case (STATEMENT_INSERT):
-    //TODO Implement the command here
-      break;
-    case (STATEMENT_SELECT):
-      //TODO implement the command here 
-      break;
-  }
-}
-
-
-void repl(void){
-  InputBuffer* input_buffer = new_input_buffer();
-  while (true) {
-    print_prompt();
-    read_input(input_buffer);
-    if (input_buffer->buffer[0] == '.') {
-      switch (do_meta_command(input_buffer)) {
-        case (META_COMMAND_SUCCESS):
-          continue;
-        case (META_COMMAND_UNRECOGNIZED_COMMAND):
-          printf("Unrecognized command '%s'\n", input_buffer->buffer);
-          continue;
-      }
-    }
-    Statement statement;
-    switch (prepare_statement(input_buffer, &statement)) {
-      case (PREPARE_SUCCESS):
-        printf("recognized statement\n");
-        break;
-      case (PREPARE_UNRECOGNIZED_STATEMENT):
-        printf("Unrecognized keyword at start of '%s'.\n",
-               input_buffer->buffer);
-        continue;
-    }
-     execute_statement(&statement);
-     printf("Executed.\n");
-  }
-}
