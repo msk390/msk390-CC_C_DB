@@ -1,4 +1,6 @@
+#include "repl.h"
+
 int main() {
-	// Code de démarrage du programme
+	start_repl();
 	return 0;
 }
