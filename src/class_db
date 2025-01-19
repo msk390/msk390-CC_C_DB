@@ -9,6 +9,7 @@ void start_repl() {
 
 	printf("Bienvenue dans Class DB !\n");
 	printf("Commandes disponibles :\n");
+	printf("  - CREATE TABLE\n\n");	
 	printf("  - INSERT <valeur>\n");
 	printf("  - SELECT\n");
 	printf("  - EXIT\n\n");
