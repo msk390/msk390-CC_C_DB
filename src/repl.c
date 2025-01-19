@@ -3,6 +3,29 @@
 #include <stdlib.h>
 #include "btree.h"
 
+Table db_table;
+
+void display_table(Table* table) {
+	if (table->column_count == 0) {
+		printf("Aucune table créée.\n");
+		return;
+	}
+
+	printf("+");
+	for (int i = 0; i < table->column_count; i++) {
+		printf("---------------+");
+	}
+	printf("\n|");
+	for (int i = 0; i < table->column_count; i++) {
+		printf(" %-13s |", table->column_names[i]);
+	}
+	printf("\n+");
+	for (int i = 0; i < table->column_count; i++) {
+		printf("---------------+");
+	}
+	printf("\n");
+}
+
 void start_repl() {
 	char command[256];  // Buffer pour lire les commandes
 	Node* root = NULL;  // Arbre binaire initialisé à NULL
@@ -32,8 +55,24 @@ void start_repl() {
 		} else if (strcmp(command, "SELECT") == 0) {
 			printf("Contenu de la base de données :\n");
 			print_tree(root);
+		} else if (strcmp(command, "CREATE TABLE") == 0) {
+			printf("Combien de colonnes voulez-vous ? (max %d) : ", MAX_COLUMNS);
+			int col_count;
+			if (scanf("%d", &col_count) != 1 || col_count <= 0 || col_count > MAX_COLUMNS) {
+				printf("Nombre de colonnes invalide. Réessayez.\n");
+				continue;
+			}
+			db_table.column_count = col_count;
+
+			printf("Entrez les noms des colonnes (un par un) :\n");
+			for (int i = 0; i < col_count; i++) {
+				printf("Nom de la colonne %d : ", i + 1);
+				scanf("%s", db_table.column_names[i]);
+			}
+			printf("Table créée avec succès !\n");
+			display_table(&db_table);
 		} else {
-			printf("Commande inconnue. Essayez EXIT, INSERT ou SELECT.\n");
+			printf("Commande inconnue. Essayez CREATE TABLE,  EXIT, INSERT ou SELECT.\n");
 		}
 	}
 }
