@@ -1,3 +1,9 @@
+## **Contributeur :**
+- [Nom : OUAZIL]
+- [Prénom : Mimoun]
+- [Classe : 3SI4]
+
+
 ## **Description du projet**
 **Class DB** est une base de données simple en ligne de commande, développée en **langage C**, avec la gestion des commandes de type SQL suivantes :
 - CREATE TABLE : Permet de créer une table avec un nombre maximum de colonnes et leurs noms.
@@ -110,7 +116,4 @@ Lancez le programme et utilisez les commandes suivantes :
 2. Recherche avancée dans la table avec des filtres (type SQL WHERE).
 3. Suppression de données avec mise à jour de l'arbre binaire.
 
----
 
-## **Contributeurs**
-- [OUAZIL Mimoun]
