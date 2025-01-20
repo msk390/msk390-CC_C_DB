@@ -122,10 +122,19 @@ void start_repl() {
 			// Supprimer le retour à la ligne laissé par fgets
 			db_table.column_names[i][strcspn(db_table.column_names[i], "\n")] = '\0';
 			}
-
-
 			printf("Table créée avec succès !\n");
 			display_table(&db_table);
+
+
+
+		} else if (strcmp(command, "PRINT TREE") == 0) {
+			if (db_table.index == NULL) {
+				printf("L'arbre est vide.\n");
+			} else {
+				printf("Contenu de l'arbre binaire :\n");
+				print_tree(db_table.index);
+			}
+
 		} else {
 			printf("Commande inconnue. Essayez CREATE TABLE,  EXIT, INSERT ou SELECT.\n");
 		}
@@ -141,6 +150,10 @@ void insert_row(Table* table, char values[MAX_COLUMNS][50]) {
 	for (int i = 0; i < table->column_count; i++) {
 		strncpy(table->rows[table->row_count].data[i], values[i], 50);
 	}
+
+	// Utiliser la première colonne comme clé pour l'arbre (par exemple, id)
+	int key = atoi(values[0]);
+	table->index = insert_node(table->index, key, table->row_count);
 
 	table->row_count++;
 	printf("Ligne insérée avec succès !\n");
