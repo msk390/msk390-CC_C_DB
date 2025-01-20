@@ -55,8 +55,9 @@ void start_repl() {
 	printf("Bienvenue dans Class DB !\n");
 	printf("Commandes disponibles :\n");
 	printf("  - CREATE TABLE\n");
-	printf("  - INSERT <valeur>\n");
+	printf("  - INSERT\n");
 	printf("  - SELECT\n");
+	printf("  - PRINT TREE\n");
 	printf("  - EXIT\n\n");
 
 	while (1) {

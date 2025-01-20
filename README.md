@@ -9,7 +9,7 @@
 - CREATE TABLE : Permet de créer une table avec un nombre maximum de colonnes et leurs noms.
 - INSERT : Ajoute des données à la table ligne par ligne, colonne par colonne.
 - SELECT : Affiche le contenu complet de la table.
-- PRINT TREE : Affiche les données indexées dans un arbre binaire selon une clé. // pas encore mis en place
+- PRINT TREE : Affiche les données indexées dans un arbre binaire selon une clé.
 - EXIT : Ferme le programme.
 
 Ce projet est conçu pour apprendre et appliquer les concepts fondamentaux :
@@ -88,7 +88,7 @@ Lancez le programme et utilisez les commandes suivantes :
    name : Alice
    Ligne insérée avec succès !
  
-- SELEC : Affichez la table.
+- SELECT : Affichez la table.
   - Exemple :
 
    SELECT
@@ -104,7 +104,7 @@ Lancez le programme et utilisez les commandes suivantes :
   - Exemple :
 
    PRINT TREE
-   Clé : 1, Ligne : 0 // pas encore mis en place
+   Clé : 1, Ligne : 0 
    
 
 - EXIT : Quittez le programme.
